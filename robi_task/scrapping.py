@@ -52,7 +52,6 @@ def scrape_content(url):
     return json.dumps(result, indent=4)
 
 
-# Example usage
-url = "https://www.robi.com.bd/en/personal/roaming/what-you-need-to-know/high-data-rate-country-list"  # Replace with the target URL
+url = "https://www.bd.airtel.com/en/about-us/board-of-directors"  
 content = scrape_content(url)
 print(content)
