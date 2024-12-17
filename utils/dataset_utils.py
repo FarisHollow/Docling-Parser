@@ -4,7 +4,6 @@ import openai
 from dotenv import load_dotenv
 from llama_index.vector_stores.qdrant import QdrantVectorStore
 from qdrant_client import models, AsyncQdrantClient
-from qdrant_client.models import PayloadSchemaType
 import qdrant_client
 from llama_index.embeddings.fastembed import FastEmbedEmbedding
 import numpy as np
@@ -40,6 +39,14 @@ if my_collection not in existing_collections:
     print(f"Collection name: {my_collection} has been created")
 else:
     print(f"Collection name: {my_collection} has been found")
+    
+    
+count = client.count(collection_name=my_collection).count
+print(f"Total points in collection '{my_collection}': {count}")
+
+# Get the number of vectors in the collection
+response = client.count(collection_name=my_collection)
+print(f"Number of vectors in the collection: {response.count}")    
 
 #     see= client.scroll(
 #     collection_name=my_collection,
@@ -48,10 +55,56 @@ else:
 # )
     
 #     print("Show succeed", see)
+async def docling_parse(files):
+    
+    from io import BytesIO
+    from docling.datamodel.base_models import InputFormat
+    from docling.datamodel.pipeline_options import PdfPipelineOptions
+    from docling.document_converter import DocumentConverter, PdfFormatOption, DocumentStream
+    from docling.pipeline.standard_pdf_pipeline import StandardPdfPipeline
+    
+    artifacts_path = StandardPdfPipeline.download_models_hf()
+    pipeline_options = PdfPipelineOptions(artifacts_path=artifacts_path)
+    converter = DocumentConverter(
+        format_options={InputFormat.PDF: PdfFormatOption(pipeline_options=pipeline_options)}
+    )
+
+    result = converter.convert(DocumentStream(name="file", stream=BytesIO(files)))  
+    output = result.document.export_to_markdown()
+    dict_output = result.document.export_to_dict()
+    list_output = [child['orig'] for child in dict_output['texts'] if 'orig' in child]
+    clean_output = '\n'.join(list_output)
+              
+    return (output, clean_output)
+
+
+async def chunking(output):
+    
+    from llama_index.core.node_parser import TokenTextSplitter
+    
+    text_splitter = TokenTextSplitter(
+        chunk_size=1000,  # Number of tokens per chunk
+        chunk_overlap=200,  
+    )
+    chunks = text_splitter.split_text(output)
+    
+    print(type(chunks), "This is type")
+            
+    return chunks
+
+
+async def embedding(nodes):
+    
+    embed_model = FastEmbedEmbedding(model_name="BAAI/bge-small-en-v1.5")   
+    embeddings = embed_model.get_text_embedding_batch(nodes)
+    embeddings = [embeddings] if isinstance(embeddings[0], float) else embeddings
+    print("Embedding shape:", np.array(embeddings).shape)
+
+    return embeddings
+    
 
 async def search_context(data):
-           
-            
+                 
         embed_model = FastEmbedEmbedding(model_name="BAAI/bge-small-en-v1.5")   
         embeddings = embed_model.get_text_embedding(data)
 
@@ -59,8 +112,7 @@ async def search_context(data):
                collection_name=my_collection,
                query_vector=embeddings,
                limit=3
-              )
-            
+              )        
     
         context = "\n".join(
                  text if isinstance(text, str) else " ".join(text)
