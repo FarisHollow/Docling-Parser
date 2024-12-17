@@ -48,17 +48,33 @@ else:
 # )
     
 #     print("Show succeed", see)
+
+async def search_context(data):
+           
+            
+        embed_model = FastEmbedEmbedding(model_name="BAAI/bge-small-en-v1.5")   
+        embeddings = embed_model.get_text_embedding(data)
+
+        search_result = client.search(
+               collection_name=my_collection,
+               query_vector=embeddings,
+               limit=3
+              )
+            
     
-async def embedding(nodes):
+        context = "\n".join(
+                 text if isinstance(text, str) else " ".join(text)
+                 for hit in search_result
+                 for text in ([hit.payload['text']] if isinstance(hit.payload['text'], str) else hit.payload['text'])
+             )
+
+        # print(f"Retrieved Context: {context}")
+            
+        enriched_query = f"Context:\n{context}\n\nUser Query:\n{data}"
+        
+        return enriched_query
     
-    embed_model = FastEmbedEmbedding(model_name="BAAI/bge-small-en-v1.5")   
-    embeddings = embed_model.get_text_embedding_batch(nodes)
-    text_embed = embed_model.get_text_embedding(nodes)
-    embeddings = [embeddings] if isinstance(embeddings[0], float) else embeddings
-    print("Embedding shape:", np.array(embeddings).shape)
-     
-    return (embeddings, text_embed)
-    
+
 
     
 vector_store = QdrantVectorStore(client=client, aclient=aclient, enable_hybrid=True, batch_size=20, collection_name=my_collection)

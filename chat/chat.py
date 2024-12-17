@@ -6,7 +6,7 @@ from llama_index.core.chat_engine.types import ChatMode
 from llama_index.core.tools import QueryEngineTool
 from llama_index.core.agent import ReActAgent
 from llama_index.llms.openai import OpenAI
-from utils.dataset_utils import client, my_collection
+from utils.dataset_utils import search_context
 import os
 import openai
 
@@ -19,8 +19,8 @@ async def websocket_endpoint(websocket: WebSocket):
     print("WebSocket connection established.")
     query_tool = QueryEngineTool.from_defaults(
         query_engine=index.as_chat_engine(),
-        name="Faris",
-        description=("Provides information about Faris",)
+        name="Data",
+        description=("Provides information about all the data deeply. If you don't know the answer simply say,  'I have no clue' ",)
     )
 
     llm = OpenAI(model='gpt-3.5-turbo')
@@ -38,27 +38,9 @@ async def websocket_endpoint(websocket: WebSocket):
             
             await websocket.send_text(f"User: {data}")
             
-            from llama_index.embeddings.fastembed import FastEmbedEmbedding
-            
-            embed_model = FastEmbedEmbedding(model_name="BAAI/bge-small-en-v1.5")   
-            embeddings = embed_model.get_text_embedding(data)
-
-            search_result = client.search(
-               collection_name=my_collection,
-               query_vector=embeddings,
-               limit=3
-              )
+            enriched_query = await search_context(data=data)
             
     
-            context = "\n".join(
-                 text if isinstance(text, str) else " ".join(text)
-                 for hit in search_result
-                 for text in ([hit.payload['text']] if isinstance(hit.payload['text'], str) else hit.payload['text'])
-             )
-
-            print(f"Retrieved Context: {context}")
-            
-            enriched_query = f"Context:\n{context}\n\nUser Query:\n{data}"
             response = str(agent.chat(enriched_query))
             print(f"Reply: {response}")
             

@@ -46,7 +46,8 @@ async def docling_parse(files):
     result = converter.convert(DocumentStream(name="file", stream=BytesIO(files)))  
     output = result.document.export_to_markdown()
     dict_output = result.document.export_to_dict()
-    clean_output = [child['orig'] for child in dict_output['texts'] if 'orig' in child]
+    list_output = [child['orig'] for child in dict_output['texts'] if 'orig' in child]
+    clean_output = '\n'.join(list_output)
     
     # keys = [f"key{i}" for i in range(1, len(clean_output) + 1)]
 
@@ -87,15 +88,23 @@ async def embedding(nodes):
     
 async def insert_db(embeddings, payloads):
     embedding_ids = [str(uuid.uuid4()) for _ in embeddings]
+    print("This is len of payload: ", len(payloads))
 
     try:
+        
+        if len(payloads) != len(embeddings):
+            raise ValueError("Number of payloads must match number of embeddings.")
+
+        # Structure payloads to match the embeddings
+        formatted_payloads = [{'text': text} for text in payloads]
+
      
         client.upsert(
             collection_name=my_collection,
             points=models.Batch(
                 ids=embedding_ids,
                 vectors=embeddings,
-                payloads=[{'text': payloads}]
+                payloads=formatted_payloads
             ),
         )
     except Exception as e:
@@ -115,17 +124,17 @@ async def create(files: Annotated[list[UploadFile], File(description="Multiple f
     if not files:
         raise HTTPException(status_code=400, detail="No files uploaded")
 
-    parse, dict_output  = await docling_parse(files=files[0].file.read())
+    parse, clean_output  = await docling_parse(files=files[0].file.read())
     
-    payloads=dict_output
+    # payloads=clean_output
 
     print(type(parse), " This is type")
-    chunk = await chunking(output=parse)
+    chunk = await chunking(output=clean_output)
     
     embed = await embedding(nodes=chunk)
     
 
-    await insert_db(embeddings=embed, payloads=payloads)
+    await insert_db(embeddings=embed, payloads=chunk)
     
     return {"message": parse} 
 
