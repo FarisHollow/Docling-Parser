@@ -44,9 +44,7 @@ async def websocket_endpoint(websocket: WebSocket):
             response = str(agent.chat(enriched_query))
             print(f"Reply: {response}")
             
-            response = str(agent.chat(data))
-            
-            print(f"Reply: {response}")
+
             await websocket.send_text(f"Reply: {response}")
             
     except WebSocketDisconnect as e:

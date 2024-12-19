@@ -1,292 +1,2320 @@
-American International University-Bangladesh (AIUB)
-Revitalizing Democracy
-Enhancing Trust and Transparency through Automated Voter Counting with Machine Learning
-Mahamud Hasan
-(20-42202-1)
-Monayem Hasan
-(20-42222-1)
-Mir Faris
-(20-42241-1)
-Md. Mehedi Hassan Shohan
-(20-42250-1)
-A Thesis submitted for the degree of Bachelor of Science (BSc)in Computer Science and Engineering (CSE) at American International University Bangladesh in January
-2024
-Faculty of Science and Technology (FST)
-i
-Abstract
-This study aims to investigate the feasibility of utilizing sophisticated image processing techniques for automated voter counting as a solution to problems related to manual vote counting during electoral processes. The goal of the study is to clarify how automated systems that make use of state-of-the-art technologies like OpenCV, CVZone and the MOG2 algorithm could significantly improve election operations' efficiency and transparency. The empirical results highlight the potential of automated voter counting to improve voting procedures and restore public faith in election results, especially in areas where trust is low. The study also stresses the use of strict measures, like the F1 score, to evaluate automated systems' accuracy in comparison to manual counting techniques in a methodical manner. This methodology enables a detailed comprehension of the differences in performance between automated and human counting techniques by providing a nuanced assessment. The incorporation of said measures serves to reinforce an extensive assessment structure, guaranteeing the legitimacy and dependability of automated voting systems inside the electoral sphere.
-ii
-Declaration by author
-This thesis is composed of our original work, and contains no material previously published or written by another person except where due reference has been made in the text. We have clearly stated the contribution of others to our thesis as a whole, including statistical assistance, survey design, data analysis, significant technical procedures, professional editorial advice, financial support and any other original research work used or reported in our thesis. The content of our thesisis the result of work we have carried out since the commencement of thesis.
-We acknowledge that copyright of all material contained in my thesis resides with the copyright holder of that material. Where appropriate we have obtained copyright permission from the copyright holder to reproduce material in this thesis and have sought permission from co-authors forany jointly authored works included in the thesis.
-Mir Faris
-20-42241-1
-Bachelor of Science
-Computer Science and Engineering
-American International University-Bangladesh
-Md. Mehedi Hassan Shohan
-20-42250-1
-Bachelor of Science
-Computer Science and Engineering
-American International University-Bangladesh
-Mahamud Hasan
-20-42202-1
-Bachelor of Science
-Computer Science and Engineering
-American International University-Bangladesh
-Monayem Hasan
-20-42222-1
-Bachelor of Science
-Computer Science and Engineering American International University-Bangladesh
-iii
-Approval
-The thesis titled "Revitalizing Democracy: Enhancing Trust and Transparency through Automated Voter Counting with Machine Learning" has been submitted to the following respected members of the board of examiners of the department of computer science in partial fulfilment of the requirementsfor the degree of Bachelors of Science in Computer Science on (17$^{th}$ January, 2024) and has been acceptedas satisfactory.
-Md. Mazid-Ul-Haque
-Lecturer and Supervisor Department of Computer Science American International University-Bangladesh
-Nazia Alfaz
-Lecturer and External Department of Computer Science American International University of Bangladesh
-Dr. Akinul Islam Jony
-Associate Professor & Head [UG]
-Department of Computer Science
-American International University-Bangladesh
-Prof. Dr. Dip Nandi
-Associate Dean
-Faculty of Science and Technology
-American International University-Bangladesh
-Mashiour Rahman
-Sr. Associate Professor & Dean-in-charge Faculty of Science and Technology American International University-Bangladesh
-4
-Publications included in this thesis.
-No publications included.
-Submitted manuscripts included in this thesis.
-No manuscripts submitted for publication.
-v
-Other publications during candidature
-No other publications.
-Research involving human or animal subjects.
-No animal or human subjects were involved in this research.
-vi
-Contributions by authors to the thesis
-List the significant and substantial inputs made by different authors to this research, work and writing represented and/or reported in the thesis. These could include significant contributions to: the conception and design of the project; non-routine technical work; analysis and interpretation of researchdata; drafting significant parts of the work or critically revising it so as to contribute to the interpretation.
-vii
-Acknowledgments
-We want to sincerely thank Allah Ta'ala, the Almighty for His guidance and blessings throughout the completion of this thesis. We extend our heartfelt thanks to Md. Mazid-Ul-Haque, our supervisor, and lecturer in the computer science department, for his unwavering support and essential guidance. His knowledge and dedication have profoundly influenced the progression of this study.
-Special appreciation goes to Nazia Alfaz, a lecturer at the Department of Computer Science and an external evaluator of our thesis, for her insightful comments, which have greatly enriched our work. We are also deeply thankful to our friends for their invaluable contributions during the data collection phase of this project.
-Lastly, we express our heartfelt gratitude to our friends who helped us in creating the custom dataset. We sincerely appreciate the collaborative support provided.
-viii
-Keywords
-Automated voter counting, Image processing, Electoral processes, Manual vote counting, OpenCV, CVZone, MOG2 algorithm, Trust deficits, Transparency in elections, public trust, F1 score, Electoral system efficiency, Computer vision integration, Real-world voting scenario, Technology in elections, Democratic practices, System accuracy, public confidence
-ix
-Table of Contents
-x
-xi
-List of Figures
-xii
-List of Tables
-xiii
-List of Abbreviations and Symbols
-xiv
-Chapter 1
-Introduction
-1.1 Background
-The democratic process, as the foundation of modern societies, gives citizens the fundamental right to vote and actively participate in the choosing of their leaders. At the core of this democratic exercise lies the crucial need for accurate and efficient voter counting [Clark, 2020]. Election results' reliability and integrity are paramount to upholding democratic principles, ensuring that the voice of the people is not only heard but also respected. Traditionally, electoral systems worldwide have relied on manual vote counting, a process fraught with challenges and limitations. Manual vote counting is both timeconsuming and labor-intensive, often resulting in delays in announcing election results. Additionally, the potential for human error introduces a significant risk to the accuracy of the count, raising concerns about the transparency and fairness of the electoral process [Lehoucq, 2003]. This has led to a substantial trust deficit in the voter counting process, particularly in nations such as Bangladesh. Citizens frequently struggle to accept reported voter numbers, suspecting inaccuracies, and casting doubt on the credibility of election results. In the context of Bangladesh, as in many other regions, the discrepancy between what the election committee reports and what the people believe has led to a significant crisis of confidence in the democratic process [TBS Report, 2022]. Such distrust can erode the very foundation of democracy, making it imperative to find innovative and dependable solutions to enhance transparency, accuracy, and public trust in the electoral system. This imperative is particularly pressing in Bangladesh, where the demand for automation in the voter counting process has gained prominence. Automated voter counting systems, especially those incorporating image processing techniques and transparency measures like CCTV installations, hold the potential to revolutionize the electoral process [Moniruzzaman, 2023]. These technological advancements can expedite the counting process, minimize the margin of error, and enhance overall transparency, offering an opportunity not only to streamline elections but also to rebuild public trust in the electoral process.
-15
-Furthermore, the implementation of an Internet of Things (IoT) system, featuring individual recognition recorded through the installation of cameras such as CCTV, represents a potential enhancement in electoral processes. Automated voter counting through image processing, an IoTbased technique employing computer vision algorithms, provides a promising avenue for addressing the challenges inherent in manual vote counting [Kovelan et al., 2019, Barney and Bernstein, 2023]. This innovative approach involves capturing images of ballots and utilizing image processing techniques to extract relevant information, presenting a potential solution to reduce the time and cost associated with manual vote counting while enhancing accuracy. Recent studies have showcased the versatility of image processing technologies in various domains. Lin et al. (2022) demonstrates that the use of deep learning frameworks for video-based vehicle counting, employing convolutional layers and residual layers to extract features from input images. Another study introduces an automatic measuring and counting procedure using multiple picture analyses, streamlining the process with minimal calibrations [Ashoka et al., 2021]. In a different context, researchers propose a new method for detecting and counting trees in aerial images using image processing techniques and machine learning algorithms [Bindhu et al., 2022]. Additionally, Arputhamoni & Saravanan (2021) introduces a smart voting system via online web conducted that utilizes biometrics on face and fingerprint detection, image processing incorporation and convolutional neural networks (CNN) as algorithm. Motive of the research is to decrease the physical involvement in electoral process. It conducts the phenomenon of India's electoral frauds as a whole democratic nation and large political influences in it. Since Bangladesh politics implies the similarities with this neighbor country, the idea of vote digitization can also bring advantages here.
-These systems can be usable for casting votes with more technical support and accuracy other than believing manual electoral process. The way machine learning approaching in the way of accuracy and transparency to detect and observe necessary objects, it is notable that the automated voters counting might be possible to integrate on relying upon its trust.
-1.2 Problem Statement
-The nation's democratic discrepancy in Bangladesh is under threat due to a recurrent mismatch between official voter turnout and public perception. Citizens are experiencing a severe crisis of confidence as a result of this separation, which has severely damaged public confidence in the democratic process. The use of manual vote counting techniques has made matters worse by causing delays, raising the possibility of human mistake, and sowing doubts about inaccuracies, all of which erode public confidence in the system. This study intends to investigate the possibility of automated
-16
-voter counting using state-of-the-art image processing technology in light of the pressing need for a trustworthy, transparent, and effective solution. In addition to addressing these issues, the aim of embracing innovation is to rebuild the legitimacy and trust of the election process, which will eventually encourage the people of Bangladesh to have newfound faith in their democratic system.
-1.3 Research Motivation
-This thesis is being offered with the intention of tackling the issues that continue to undermine public confidence in Bangladesh's voting system. A serious crisis of confidence has emerged among citizens despite the basic significance of free and fair elections due to the disparity between reported voter turnout and popular opinion. The manual counting of votes, which is prone to mistakes, delays, and mistrust due to apparent inconsistencies, has played a major role in this confidence erosion. As such, creative ideas that can improve the election system's dependability and transparency must be put into place immediately. This thesis attempts to provide an effective and workable solution by concentrating on the creation and application of an automated voter counting system using image processing techniques. The study aims to present actual data demonstrating the efficiency of these technology measures in minimizing errors, lowering human error rates, and eventually restoring public confidence in Bangladesh's election system. With an emphasis on the critical role that technology plays in promoting transparency, integrity, and confidence in democratic processes, this thesis aims to make a substantial contribution to the conversation on electoral reform.
-1.4 Research Question
-Here we come up with queries that provides an idea of the phenomenon solution. These questions claim the initial abridgment to bring under a conduct. The challenges are to consider the strategies in the end.
-· "Is automated voter counting through image processing a reliable solution to overcome the challenges of manual vote counting?"
-·"Can the adoption of automated voter counting enhance public trust in the electoral process, particularly in countries facing trust deficits like Bangladesh?"
-1.5 Research Objectives
-This research initiative's main goals are diverse and crucial in tackling the issues that the Bangladeshi
-17
-electoral process faces. The main objective is to use advanced image processing techniques to create and build an automated voter counting system. When compared to manual counting techniques, this technology seeks to improve accuracy and efficiency by streamlining the counting process. Additionally, a crucial component of this research is a thorough assessment aimed at measuring the system's performance metrics in terms of accuracy and efficiency when compared to the standard manual counting methods.
-· Automated Voter Counting System: The primary goal is to develop and implement an automated voter counting system in Bangladesh using advanced image processing techniques.
-· Accuracy and Efficiency Improvement: The research aims to improve the accuracy and efficiency of the electoral process by leveraging technology, with a particular focus on surpassing the limitations associated with manual counting methods.
-· Performance Metrics Assessment: A crucial component involves a thorough assessment of the performance metrics of the automated system, comparing its accuracy and efficiency against traditional manual counting methods.
-· Impact on Electoral Transparency: The study seeks to understand and measure the broader impact of automated voter counting on electoral openness, aiming to enhance transparency in the electoral process.
-· Public Confidence Evaluation: Another critical aspect is the evaluation of how the adoption of automated counting influences public confidence in the electoral system, contributing to closing the trust gap between the electorate and the election committee.
-· Democratic Process Strengthening: The ultimate goal is to fortify democratic processes by utilizing technology to address existing challenges, creating an electoral environment that instills trust and confidence among the public.
-1.6 Research Outline
-Literature review, research methodology or the strategy to conduct this paper, experiment and data collection in results or findings, discussion & conclusion are the next chapters further. Modern era phenomenon needs innovative solution on wide level. So, the upcoming chapter's purposes will hold a significant role on revitalizing the democracy on controversial electoral issues.
-18
-Chapter 2
-Literature review
-2.1 Introduction
-The electoral process in community totally based on the electorate system management where corruption on the integrity and fairness of proper vote counting issue is under concern by the citizens of respected countries especially Bangladesh [Siddiky, 2022]. To rectify this issue, the paper initiated a controversial solution focusing mainly on the public trust to enhance fairness on certain point of electoral operation. An implementation of automatic voters counting system placing on explicit area focusing only on unique human figure entries. Installation of this solution will enumerate the tally on the basis of object manipulation in its sight. The trustiness of polling booth begins downfall amongst public during the start of canvassing. The formal procedure referred to as "canvassing" involves the tallying, handling and verification of votes before they are officially incorporated into the election outcome. State regulations safeguard this process by specifying who is involved in canvassing, its duration the data included and the information accessible, to the public. The whole procedure undertakes within electoral campaign. There are manual and electronic voting process while majority used manual and sparingly used the EVM (Electronic Voting Machine) in different city corporation election. As claims from the Bangladesh Nationalist parties and other political parties goes against EVM that likely to be rigged [Chowdhury, 2023, Geraty, 2022].
-2.2 Traditional Voting
-As Bangladesh polling utmost relying upon manual voting, a ballot paper based system that consisting of controversies on electoral fraud. The voting procedures with EVM is also correlated, yet the Bangladesh Election Commission (BEC) stated the EVM will not be used in 2024 election due to financial issues to supply all the 300 constituencies [Bangladesh to scrap EVMs, 2023]. Typical voting process arises from voter's arrival at their designated polling station till they return the special marking stamp to the Assistant Presiding Officer after submitting the paper in the ballot box. The voter first
-19
-reaches the first polling officer to check the entry as a voter then head towards second polling officer who inspects the voter's thumb with indelible ink. Then voter reaches to assistant presiding officer to conclude the process. The problem arises when sometimes name does not appear on the voter list, already ticked the list or spoilt paper issues sums up [National Democratic Institute for International Affairs, 2002]. Perhaps, it is sometimes hard to maintain all the voters count process and insidious rigging manually with the organized personnel.
-2.3 Human Detection & Count
-Machine learning technology implemented and installing the necessary equipment in situated camera on the purpose of counting voters at the polling booth entry. Every human body has inconsistent features which can be used to uniquely identify each of them using deep learning algorithms. The entry of the polling booths should be cautious enough to maintain the voters line and ensure the discipline manually. This proposes a concept to count the total inputs observation into booths and display on every constituency and media officially to verify the accuracy of ballot inputs. OpenCV is used as an open source platform along with python library CVZone, and algorithms are Haar Cascade and CNN deep learning ML models.
-OpenCV is stated to be an open source computer vision library considering especially complicated image processing and detecting objects via algorithms. It is applied in a number of real-world situations. It facilitates improved object recognition, gesture comprehension, and human-computer interaction. It is utilized, for instance, in facial recognition, camera tracking, and motion comprehension. It also aids with activities like measuring distances and deriving 3D information from multi-camera photos. To put it another way, OpenCV can be thought of as a tool that aids computers in seeing and comprehending the world around them. Examples of this kind of assistance include facial recognition in photos and guiding robots around their environment [Uke & Thool, 2013].
-A Python package called CVZone facilitates mediapipe operation. Because of its ability to process both audio and visual input, it simplifies tasks like recognizing faces, tracking hand motions, calculating body positions, and identifying facial features. To put it another way, CVZone facilitates the analysis of sounds and movies, which makes it simpler to perform interesting tasks like hand tracking and facial recognition in videos [Patel, 2023]. Thus, human detection and counting the voters by using this source of libraries possibly a better option as the system would need human features in its tasks.
-2.4 MoG2
-20
-An algorithm to efficiently detect object by subtracting the background and reading its movement to count the voters individually, Mixture of Gaussian 2 (MoG2) is suitable for real time. For every pixel in a video clip, the MoG2 technique tracks multiple Gaussian distributions simultaneously. In contrast to MoG, MoG2 preserves unique density functions for every pixel, which enables it to efficiently handle and integrate intricate multi-modal background distributions.
-According to Mohamed et al., (2010) the Mixture of Gaussians (MoG) approach proves advantageous in outdoor settings as it excels in distinguishing and suppressing non-stationary objects often considered as noise, like moving leaves or shifting sky patterns. It functions by maintaining a background model that is updated every time a new frame of video is captured. This feature significantly reduces its memory demands compared to non-recursive methods, enhancing its computational efficiency while maintaining reliability in object detection.
-The Mixture of Gaussian (MOG) approach was presented by Stauffer and Grimson as a way to describe background information pixel-by-pixel. The method of this approach was to improve the intensity and variance mean for each and every individual pixel in real time, while also changing the background continually. As MoG2 technology determines the appropriate number of Gaussian distributions for each pixel automatically. It might even choose whether or not to detect shadows with it. Because this approach can adapt to different lighting conditions, it works effectively in a variety of scenarios. MOG2 is updated version of MoG, generating similar approach with extra features [Qasim et al., 2021].
-By using this method, the model can adjust to changing lighting and dynamic changes in the surroundings, which helps it distinguish between various background modes that are present in the scene.
-2.5 Related Works
-These papers subjected on object detecting and count it that concluding issues for an electoral controversial solution.
-A computer vision-based method for person counting and monitoring entrances and exits inside a scene is presented in the publication " Robust Background Subtraction Based Person's Counting from Overhead View ." After testing a number of background reduction techniques with an overhead camera, the study concludes that the Mixture of Gaussian (MoG) algorithm works best for top-down person counting. This method tracks people entering and leaving the area by using a predefined virtual zone. Based on the ground truth of the created dataset with the abridgment of limited subject in constrained
-21
-environment, the algorithm achieves high accuracy: 98% for entries and exits within the virtual zone and 98% for human counting. The MoG approach demonstrates strong noise rejection and flexibility, with room for further development to identify additional users, ascertain their directions of movement, and incorporate classification techniques for more extensive datasets [Ahmad et al., 2018].
-According to Uke & Thool, (2013), the paper introduces a smart counting and vehicle detection system created using Visual C++ and also Intel's OpenCV, utilizing OpenCV image enhancement kits for implementation. In today's busy traffic scenarios, accurately monitoring vehicles is crucial for tasks such as highway oversight, traffic flow planning, and toll collection. What's intriguing about this system is its reliance on Computer Vision techniques, ensuring seamless installation and adaptable functionality. It's cost-effective, portable, and proficient at identifying various vehicle types-ranging from light vehicles to heavy ones and motorcycles. Rigorous testing on a standard laptop validated its efficiency in real-time vehicle counting using methods like background subtraction and image filtering. Moreover, its ability to count vehicles from both live feeds and pre-recorded videos positions it as a potential game-changer in optimizing traffic management systems.
-About the paper to count passengers in a bus, the application of OpenCV's MOG2 algorithm for accurate passenger counting in a ticket-less bus service during a housing fair is described in depth in the paper. In order to track passengers, it combines shape detection and picture analysis, focusing on the number of people entering and leaving various bus stops. Route optimization and statistical data collection are the main goals in order to prepare for future events. This study demonstrates how computer vision techniques, particularly the MOG2 algorithm with OpenCV, can be used to accurately and economically count the number of individuals in situations when more traditional methods fall short [Grönman et al., 2019]. Experimental results were demonstrated using real-time video captured from a single camera, confirming its practical suitability and performance.
-Sabancı et al. (2018) argues the vital junction of computer-human interaction and image processing, particularly in systems employing cameras to count in library. The writers stress how crucial object identification is to improving computer capabilities-particularly in dynamic contexts. They discuss problems including the intricacies of real-time processing and provide fixes like shadow detection and background reduction. Notably, the integration of Internet of Things (IoT) concepts, utilizing the Thingspeak platform, is introduced for efficient data transfer. After that, the paper turns to a practical application and presents an autonomous system designed specifically for people counting in spaces. Originally created to help students discover study areas during exam weeks, this system demonstrates adaptability for more general applications including sensor data transfer. The project's potential significance is emphasized by the authors, who also highlight how it might help overcome certain
-22
-obstacles and show how scalable it is for a range of sensor-related demands.
-In order to detect criminal activity in public areas, the article " Motion and Object Recognition for Crime Prediction and Forecasting: A Review " suggests using an algorithm to create an automated surveillance system. The technology uses motion detection and object classification based on machine learning with the goal of improving public safety. Techniques for feature extraction, detection, and motion are essential for spotting patterns that point to aggressive or strange behavior. The project uses OpenCV for background subtraction including the MOG2 algorithm, video feed recording, and Python and Computer Vision are used to implement motion detection. By analyzing CCTV camera footage, the system can differentiate between routine and questionable activity in public areas. Important procedures including dataset preparation, preprocessing, model training, and evaluation are part of the detection process. By assisting law enforcement authorities in identifying patterns and contributing causes to violent behavior, the goal is to prevent violent situations through early intervention. The system exhibits the varied application of technology in crime prediction and prevention by directing police patrols towards potential criminal activities through the implementation of machine learning algorithms [Viswanatha et al., 2023].
-" Pedestrian flow counter using image processing " presents a human counting system that counts people reliably in a variety of settings, including retail stores, malls, and ATMs. It does this by using Image Processing techniques. The system uses a WiFi feed from an IP CCTV camera overhead that is processed by Python's OpenCV module. To reduce noise and improve blobs, morphological treatments are conducted frame-by-frame to the live video input. Blob coordinates are extracted using the contours approach, which enables efficient tracking and counting inside predetermined frame zones. The report goes into great detail about how lighting, camera angle, camera height, and range of vision affect counting accuracy. For effective operation, the suggested People Counter Combines Blob Tracking, Area Contours, and Background Subtraction. Morphological changes are used to ensure correct background subtraction. Important environmental issues include illumination and camera angle. Because image processing requires a lot of computing power, the paper also compares the performance of an expensive GPU-powered i5 processor with other onboard processors [Madhira & Shukla, 2017].
-23
-Chapter 3
-Methodology
-3.1 Introduction
-The methodology is consisting of steps and strategy to conclude the research components on technical perspective. The topic conducted within the technical evaluation that sums up the mixed method approach used in researching this critical social abridgment. Both qualitative and quantitative method is used. The phenomenon on the basis of electoral process implies the qualitative approach regarding to analyze the qualitative data via literature review. The concern reports or articles on electoral process defined significant sampling. Studying the literature, the trust of citizens on vote dwell under major controversies on transparency and fairness of election. This study conducted planning on the current affairs going on the election 2024 and information from surrounding rumors and controversial topics. The quantitative approach justifies the solution tool used in the implementation. For the integrating outcome of algorithm and smart devices to simplify the machine learning approach is conducted thoroughly by quantitative data analysis. Reviewing earlier studies on the use of photos & stream videos for automated vote counting in order to determine how to count people using technology & gathered data that replicated various voting circumstances. The computer vision employed isolation, identification, and tracking individuals from the background. Selected algorithm Mog2, libraries like CVZone and OpenCV focused on every video frame in real time, classify, and count the number of persons. Extensive testing is evaluated to improve accuracy. The purpose of this quantitative method was to evaluate automated voter counting systems' efficacy and accuracy.
-Complications of elections are specified by the participants within general public. Sample data collection implemented on testing solution through suitable algorithm implemented on the mentioned libraries and platform. The Mog2 algorithm was picked because it was effective at background subtraction, and CVZone and OpenCV were picked because of their robustness, ease of integration, and comprehensive functionality in completing a variety of computer vision tasks that were essential to count by detecting subjects, like real-time video frame analysis, object detection, and tracking.
-24
-Fig 01: All the phases
-3.2 Phase I: Literature Review
-Examining previous studies on computer vision integration, image processing techniques, and automated voter counting systems in election processes is the main goal of the literature review phase. This entails combining various studies, evaluating the advantages and disadvantages, looking at case studies from around the world, and seeing patterns to guide the development of transparent, reliable, and accurate voting systems.
-3.2.1 Comprehensive Literature Search: Conduct a meticulous and systematic review of a diverse range of academic databases, journals, conference proceedings, and authoritative publications to assemble a comprehensive collection of relevant literature.
-3.2.2 Thematic Categorization: Organize the gathered literature into distinct themes, encompassing topics such as advanced image processing algorithms, the utilization of computer vision in voting systems, and the evolution of automated voter counting mechanisms.
-3.2.3 Critical Synthesis: Perform a critical synthesis of the identified literature, emphasizing the strengths, weaknesses, trends, and gaps in existing methodologies. This synthesis will provide a nuanced understanding of the current state of automated voter counting systems.
-3.2.4 Cross-disciplinary Exploration: Incorporate interdisciplinary research to gain a comprehensive knowledge that encompasses technology, ethics, and government.
-25
-3.3 Phase II: Voter Counting Experiment
-The second phase endeavors to conduct a meticulously designed experiment emulating a real-world voting scenario. This involves recording the voting process and implementing cutting-edge computer vision techniques for automated voter counting.
-3.3.1 Experimental Design: Establish a controlled voting environment, ensuring its authenticity and representativeness of actual voting scenarios. Consider factors such as participant behavior, spatial dynamics, and potential challenges.
-3.3.2 Placement of Device: The device should be placed on a suitable clear view area in front of booth entry.
-3.3.3 High-Resolution Recording: Employ state-of-the-art video recording equipment to capture the entire voting process with meticulous attention to detail, ensuring clarity in individual movements and interactions. It requires high level device for capturing the modern included features.
-3.3.4 Advanced Computer Vision Implementation: Using the OpenCV library's powerful MOG2 (Mixture of Gaussians) algorithm, this study deliberately applies cutting-edge methods for accurate person detection and tracking, which is especially important when it comes to automated voter counting. Because to MOG2's skill at background subtraction, object nature is accurately identified. In addition, the CVZone library integration greatly expands the capabilities of the system by making it easier to handle the detailed processing of audio and visual inputs as well as dynamic motion monitoring. The addition of dynamic line formation improves the accuracy of the system even further and allows for more precise demarcation of entry and exit points. The ability of MOG2 to distinguish dynamic properties of entities improves the system's capacity to effectively classify persons, hence reducing the likelihood of miscounts.
-26
-Fig 02: A comprehensive flow chart diagram
-3.3.5 Monitoring Environment Variables: Keeping an eye on how environmental factors affect the precision of the automated counting system when voting in order to conduct a thorough investigation. Such as MOG2 on contradiction to selection of shadow.
-3.3.6 Quantitative Data Collection: Systematically extract quantitative data encompassing the number of individuals entering and exiting the voting area throughout the recorded session.
-3.4 Phase III: Data Analysis
-The third phase involves a rigorous analysis of the extracted data, comparing automated voter counting results with manually derived ground truth to evaluate the accuracy, efficiency, and reliability of the implemented system.
-3.4.1 Data Extraction and Transformation: Extract pertinent data points from the recorded video, employing advanced data transformation techniques to ensure compatibility and coherence.
-27
-3.4.2 Ground Truth Establishment: Establish a robust ground truth by manually counting individuals in the recorded video, serving as a benchmark for evaluating the accuracy of the automated voter counting system.
-3.4.3 Quantitative and Qualitative Analysis: In the quantitative analysis phase, the evaluation of the automated voter counting system will extend beyond traditional metrics like accuracy and precision. The inclusion of the F1 score adds a layer of sophistication to the assessment by considering both precision and recall simultaneously [Tigerschiold, 2022]. This is crucial, especially in scenarios where imbalanced datasets or equitable consideration of false positives and false negatives are paramount. The F1 score is a metric often used in machine learning and statistics to evaluate the effectiveness of a classification model, especially when dealing with imbalanced datasets or confusion matrices. It offers a balance between these two measurements and is the harmonic mean of recall and precision.
-Precision (also called positive predictive value) can be calculated by dividing the total number of positive predictions by the number of real positive forecasts. It gauges how accurate positive forecasts are.
-𝑃𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 = 𝑇𝑃 $_{𝑇𝑃+𝐹𝑃}$
-Recall (also called sensitivity or true positive rate) is the number of true positive predictions divided by the total number of actual positive instances. It measures the ability of the model to capture all the positive instances.
-𝑅𝑒𝑐𝑎𝑙𝑙 = 𝑇𝑃 $_{𝑇𝑃+𝐹𝑁}$
-The harmonic mean of recall and precision is then used to compute the F1 score:
-𝐹1𝑆𝑐𝑜𝑟𝑒 = 2 × 𝑃𝑟𝑒𝑐𝑒𝑠𝑖𝑜𝑛 × 𝑅𝑒𝑐𝑎𝑙𝑙 𝑃𝑟𝑒𝑐𝑒𝑠𝑖𝑜𝑛 + 𝑅𝑒𝑒𝑐𝑎𝑙𝑙
-28
-The F1 score ranges from 0 to 1, where 1 indicates perfect precision and recall, and 0 indicates the worst performance. It is a useful metric when there is an uneven class distribution or when both false positives and false negatives are important considerations for the task at hand [Tigerschiold, 2022].
-3.4.4 Statistical Significance Testing: Apply robust statistical methods to assess the significance of disparities between automated and manual counting results, providing a scientific basis for the system's efficacy.
-3.4.5 Comprehensive Result Presentation: Present findings comprehensively, incorporating visualizations, statistical summaries, and insights into the strengths and weaknesses of the automated voter counting system. Propose areas for refinement and potential avenues for future research.
-29
-Chapter 4
-Results or findings
-4.1 Introduction
-The automated voter counting system was developed using a custom dataset, created with the collaboration of friends, simulating a voting environment. The dataset was generated by recording individuals using a camera within this simulated voting setting. The following processes were applied to the recorded data using OpenCV, CVZone, and the MOG2 algorithm.
-4.2 Data Collection
-The custom dataset was systematically collected, capturing individuals participating in the voting simulation. Utilizing OpenCV, CVZone, and the MOG2 algorithm, the recorded video frames were processed to identify and count individuals entering and exiting the voting area.
-Fig. 03: Dataset for voter counting
-This image provides a visual representation of the data collection process in our voting simulation, employing advanced computer vision techniques. Utilizing a custom dataset meticulously gathered during the simulation, the image showcases the successful application of OpenCV, CVZone.
-30
-4.3 Analysis of Results
-The processed data provided valuable insights into the accuracy and efficiency of the automated voter counting system. By comparing the system's counts with the ground truth data obtained during the voting simulation, we evaluated the performance of the system. The analysis involved quantitative metrics such as accuracy, precision, recall, and F1 score.
-TABLE1: Experimental Results
-This table delves into the specifics of system performance, presenting the accuracy in counting people entering and exiting in various scenarios. The consistent accuracy of 99.15% across different situations highlights the reliability of the system. The overall accuracy remains robust at 99.15%, indicating the system's effectiveness in accurately detecting and counting individuals in the dynamic voting environment.
-31
-Let's define the following:
-For entering:
-True Positives (TP_enter): 30 (people who both entered and were counted)
-False Positives (FP_enter): 0 (people who were counted as entering but did not enter)
-False Negatives (FN_enter): 0 (people who entered but were not counted)
-𝑃𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 = 𝑇𝑃𝑒𝑛𝑡𝑒𝑟 𝑇𝑃𝑒𝑛𝑡𝑒𝑟 + 𝐹𝑃𝑒𝑛𝑡𝑒𝑟 = 30 30 + 0 = 1
-𝑅𝑒𝑐𝑎𝑙𝑙 = 𝑇𝑃𝑒𝑛𝑡𝑒𝑟 𝑇𝑃𝑒𝑛𝑡𝑒𝑟 + 𝐹𝑁𝑒𝑛𝑡𝑒𝑟 = 30 30 + 0 = 1
-𝐹1𝑒𝑛𝑡𝑒𝑟 = 2 × 𝑃𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 × 𝑅𝑒𝑐𝑎𝑙𝑙 𝑃𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 + 𝑅𝑒𝑐𝑎𝑙𝑙 = 1 = 100%
-For exiting:
-True Positives (TP_exit): 29 (people who both exited and were counted)
-False Positives (FP_exit): 1 (people who were counted as exiting but did not exit)
-False Negatives (FN_exit): 1 (people who exited but were not counted)
-Now we can calculate precision, recall, and F1 score for both entering and exiting, and then find the average.
-𝑃𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 = 𝑇𝑃𝑒𝑥𝑖𝑡 𝑇𝑃𝑒𝑥𝑖𝑡 + 𝐹𝑃𝑒𝑥𝑖𝑡 = 29 30
-𝑅𝑒𝑐𝑎𝑙𝑙 = 𝑇𝑃𝑒𝑥𝑖𝑡 𝑇𝑃𝑒𝑥𝑖𝑡 + 𝐹𝑁𝑒𝑥𝑖𝑡 = 29 30
-𝐹1𝑒𝑥𝑖𝑡 = 2 × 𝑃𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 × 𝑅𝑒𝑐𝑎𝑙𝑙 𝑃𝑟𝑒𝑐𝑖𝑠𝑖𝑜𝑛 + 𝑅𝑒𝑐𝑎𝑙𝑙 = 0.983 = 98.3%
-Average F1 Score:
-𝐴𝑣𝑒𝑟𝑎𝑔𝑒 𝐹1𝑆𝑐𝑜𝑟𝑒 = 𝐹1𝑒𝑛𝑡𝑒𝑟 + 𝐹1𝑒𝑥𝑖𝑡 2 = 0.9915 = 99.15%
-32
-Table 2: Overview of People Counting Accuracy
-This table outlines the accuracy of the automated voter counting system in different scenarios. Notably, the system achieved perfect accuracy in counting individuals entering the voting environment, showcasing its precision. Moreover, the high accuracy of 98.3% in counting people exiting reflects the system's effectiveness. The overall counting average reached an impressive 99.15%, emphasizing the reliability of the system in monitoring both entry and exit scenarios.
-Table 3: Implementation Details and Findings
-This table provides insights into the implementation details of the automated voter counting system. The use of CVZone and OpenCV libraries, coupled with the MOG2 algorithm, enabled real-time video frame analysis, object detection, and tracking of individuals. The creation of a voting environment dataset facilitated the simulation of real-world scenarios, contributing to the systematic collection of quantitative
-33
-data. The system achieved an impressive accuracy of 99.15%, successfully detecting and counting individuals during the voting process.
-4.4 Key Findings
-Accuracy: The automated voter counting system demonstrated an accuracy rate of 99.15%, showcasing its effectiveness in accurately detecting and counting individuals within the voting environment.
-The utilization of the custom dataset, combined with the implementation of OpenCV, CVZone, and the MOG2 algorithm, yielded a robust automated voter counting system. The system's accuracy of 99.15% and additional performance metrics emphasized its reliability in accurately counting individuals within a simulated voting environment. The findings from this analysis contribute to the advancement of automated systems for enhancing the efficiency and transparency of the electoral process.
-34
-Chapter 5
-Discussion
-5.1. Introduction
-Implementing an automated voter counting system is a significant step forward in improving the efficiency and accuracy of electoral operations. In this study, the automated system was developed and evaluated using a custom dataset created through collaborative efforts within a simulated voting environment. Using OpenCV, CVZone and the MOG2 algorithm, the system achieved an impressive 99.15% accuracy rate, shedding light on its potential to transform the way we count votes. This brief discussion focuses on the study's important findings and consequences, shining light on the automated system's success in maintaining openness and dependability in the electoral sphere.
-5.2. Comparative Analysis and Theoretical Relevance
-The use of OpenCV, CVZone and the MOG2 algorithm in the development of an automated voter counting system produced good results, with an average accuracy of 99.15%. While the study falls short of obtaining 100% accuracy, this discrepancy encourages a further investigation into the complexities of image processing and machine learning in real-world circumstances. The theoretical importance stems from the congruence with prior research that emphasize the use of technology in electoral processes.
-5.3. Explanation of Results
-The discussion of results dives into the details of the attained 99.15% accuracy, taking into account the challenges of real-time video frame processing and object detection. The study of how these technologies work together to count voters in a simulated voting environment will provide insight into the automated system's practical consequences.
-5.4. Unexpected Results
-Any unanticipated deviations from the predicted 100% accuracy will be publicly discussed. Potential explanations for the little disparity, such as environmental influences or dataset creation difficulties, will
-35
-be investigated. This open conversation is critical for improving future implementations and increasing the reliability of automated voter counting systems.
-5.5. Limitations and Unanswered Questions
-Recognizing the limits of the study is critical. The representativeness of the custom dataset, potential biases, and constraints in the chosen algorithm will all be examined. Unanswered questions, such as the appropriate threshold for reaching 100% accuracy, will be addressed, providing the framework for future research efforts.
-5.6. Significance and Implications
-The achieved accuracy of 99.15% has important implications for the actual implementation of automated voter counting systems. The debate will go into how this level of accuracy adds to the larger conversation about electoral openness and efficiency. Furthermore, the study's usefulness in building public trust in political procedures, even with minor deviations from perfection.
-36
-Chapter 6
-Conclusion
-Finally, the development and successful implementation of an automated voter counting system based on image processing techniques and computer vision technologies represents a significant step toward addressing the pressing challenges faced by manual vote counting processes, particularly in countries such as Bangladesh where trust deficits in the electoral system exist.
-The automated approach, which is based on a custom dataset and advanced technologies such as OpenCV, CVZone and the MOG2 algorithm, offers a potential solution to long-standing challenges in the election process. The system's astounding accuracy of 99.15% not only testifies to its technological usefulness, but also shows potential for strengthening public faith in the democratic process.
-In countries with a history of trust concerns, such as Bangladesh, where accusations of vote manipulation and irregularities are common, the implementation of automated voter counting brings a level of transparency and efficiency that can assist reestablish trust. The system's capacity to count votes accurately in real time addresses issues about voting secrecy and legitimacy. This, in turn, can reduce suspicions that votes were cast the night before or manipulated during the counting process.
-Future Work
-As we move forward, future work should center on expanding the application of image processing systems to recognize individuals through identity verification. This can be pivotal in addressing concerns about ghost voting and ensuring that every vote is cast by a legitimate voter.
-The plan for implementing an identity recognition system involves incorporating facial recognition or biometric verification through cameras installed at polling stations. This approach not only adds an extra layer of security to the voting process but also contributes to building trust by ensuring that every vote is linked to a verified and legitimate voter.
-37
-Furthermore, there is a need for a comprehensive public awareness campaign to educate citizens about the advantages of automated voter counting. Building trust requires not only technological advancements but also a concerted effort to inform and involve the public in understanding and accepting these innovations. This initiative aims to contribute not just to the technological evolution of the electoral process but also to the social transformation necessary for rebuilding trust in democratic practices.
-38
-Bibliography
-1. Arputhamoni, S. J. J. and A. G. Saravanan, A. G. (2021). "Online smart voting system using biometrics based facial and fingerprint detection on image processing and CNN," 2021 Third International Conference on Intelligent Communication Technologies and Virtual Mobile Networks (ICICV), Tirunelveli, India, 2021, pp. 1-7, Doi: 10.1109/icicv50876.2021.9388405.
-2. Lin, H., Yuan, Z., He, B., Kuai, X., Li, X., & Guo, R. (2022). A deep learning framework for video-based vehicle counting. Frontiers in Physics, 10, 829734.
-3. Ashoka, S. B., Hanumanthappa, M., & Mahendra, S. J. (2021). Automated Voter System by Using Fingerprint and Offline Data Set with Texture Image Processing. In Rising Threats in Expert Applications and Solutions: Proceedings of FICR-TEAS 2020 (pp. 105109). Springer Singapore.
-4. Bindhu, M. L. H., Potluri, T., Korra, C. B., & Prasad, J. V. D. (2022). Detection and Counting of Trees in Aerial Images Using Image Processing Techniques. In Communication, Software and Networks: Proceedings of INDIA 2022 (pp. 181-189). Singapore: Springer Nature Singapore.
-5. Clark, R. (2020). The Importance of Voting. Castleton University. https://www.castleton.edu/news-media/article/the-importance-of-voting/. Accessed on 10 $^{th}$ November, 2023.
-6. Lehoucq, F. (2003). Electoral Fraud: Causes, types and Consequences. Annual Reviews, 6, 233-256.
-39
-7. TBS Report. (2022). EC urged to bring back trust in election system . The Business Standard . Retrieved from https://www.tbsnews.net/bangladesh/we-are-not-holdingpointless-dialogues-cec-405258
-8. Moniruzzaman, A. (2023). Technology can play a vital role in ensuring fair elections. Prothom Alo English . https://en.prothomalo.com/opinion/zmuferuryw
-9. Barney, N. & Bernstein, C. (2023). Face detection. TechTarget Enterprise AI . https://www.techtarget.com/searchenterpriseai/definition/face-detection
-10. Kovelan, P., Thisenthira, N. & Kartheeswaran, T. (2019). Automated Attendance Monitoring System Using IoT. In International Conference on Advancements in Computing (ICAC), Malabe, Srilanka.
-11. Siddiky, C. I. A. (2022). Electoral Corruption in Bangladesh . In Electoral Corruption Conference, Dhaka, Bangladesh.
-12. Chowdhury, K. R. (2023). Bangladesh nixes plan to use electronic voting machines in next poll. Benar news . https://www.benarnews.org/english/news/bengali/bangladesh-pollevms-01232023141536.html
-13. Geraty, M. (2022). This is how votes are counted and verified in U.S. elections. Represent Us . Available at https://act.represent.us/sign/how-votes-are-counted/. Accessed on 3$^{rd}$ December, 2023.
-14. National Democratic Institute for International Affairs. (2002). Election Day Manual for Polling Agents: Monitoring Elections in Bangladesh.
-15. Bangladesh to scrap EVMs and conduct general polls with paper ballots. (2023). Dhaka
-40
-Tribune.https://www.livemint.com/news/world/bangladesh-to-scrap-evms-and-conduct-generalpolls-with-paper-ballots-11680681702852.html. Accessed on 15 $^{th}$ December, 2023.
-16. Uke, N. J., & Thool, R. C. (2013). Moving Vehicle Detection for Measuring Traffic Count Using OpenCV. Journal of Automation and Control Engineering, 1 (4).
-17. Patel, M. (2023). American Sign Language Detection . California State University, Northridge.
-18. Qasim, S., Khan, K. N., Yu, M., & Khan, M. S. (2021). Performance Evaluation of Background Subtraction Techniques for Video Frames . In International Conference on Artificial Intelligence (ICAI), Islamabad, Pakistan.
-19. Mohamed, S. S., Tahir, N. M., & Adnan, R. (2010). Background Modelling and Background Subtraction Performance for Object Detection . In 2010 6th International Colloquium on Signal Processing & Its Applications (CSPA), Malaysia.
-20. Ahmad, M., Ahmed, I., Ullah, K., Khan, I., & Adnan, A. (2018). Robust Background Subtraction Based Person's Counting From Overhead View . In 2018 9th IEEE Annual Ubiquitous Computing, Electronics & Mobile Communication Conference (UEMCON) (pp. 1-6), New York, USA.
-21. Grönman, J., Sillberg, P., Rantanen, P., & Saari, M. (2019). People Counting in a Public Event-Use Case: Free-to-Ride Bus . In 2019 42nd International Convention on Information and Communication Technology, Electronics and Microelectronics (MIPRO) (pp. 1-6), Opatija, Croatia.
-22. Tigerschiold, T. (2022). What is Accuracy, Precision, Recall and F1 Score? Labelf AI. Retrieved from https://www.labelf.ai/blog/what-is-accuracy-precision-recall-and-f1-score. Accessed on 13$^{th}$ January, 2024.
-41
-23. Sabancı, K., Üstün, D., Yigit, E., Toktaş, A., & Çelik, Y. (2018). Thingspeak Based Monitoring IoT System for Counting People in A Library . International Conference on Artificial Intelligence and Data Processing (IDAP), Malatya, Turkey.
-24. Viswanatha, V., Ramachandra, A. C., Thota, S. M., Nalluri, S. D., & Thota, A. (2023). Motion and Object Recognition for Crime Prediction and Forecasting: A Review. EasyChair Preprints. Quaderns Journal , ISSN: 1138-5790.
-25. Madhira, K., & Shukla, A. (2017). Pedestrian Flow Counter using Image Processing . In 2017 International Conference on Energy, Communication, Data Analytics and Soft Computing (ICECDS), Chennai, India.
-42
+{
+    "schema_name": "DoclingDocument",
+    "version": "1.0.0",
+    "name": "file",
+    "origin": {
+        "mimetype": "application/pdf",
+        "binary_hash": 1833292630485477801,
+        "filename": "file"
+    },
+    "furniture": {
+        "self_ref": "#/furniture",
+        "children": [],
+        "name": "_root_",
+        "label": "unspecified"
+    },
+    "body": {
+        "self_ref": "#/body",
+        "children": [
+            {
+                "$ref": "#/pictures/0"
+            },
+            {
+                "$ref": "#/texts/0"
+            },
+            {
+                "$ref": "#/texts/1"
+            },
+            {
+                "$ref": "#/texts/2"
+            },
+            {
+                "$ref": "#/texts/3"
+            },
+            {
+                "$ref": "#/texts/4"
+            },
+            {
+                "$ref": "#/texts/5"
+            },
+            {
+                "$ref": "#/texts/6"
+            },
+            {
+                "$ref": "#/groups/0"
+            },
+            {
+                "$ref": "#/texts/10"
+            },
+            {
+                "$ref": "#/groups/1"
+            },
+            {
+                "$ref": "#/texts/12"
+            },
+            {
+                "$ref": "#/texts/13"
+            },
+            {
+                "$ref": "#/texts/14"
+            },
+            {
+                "$ref": "#/groups/2"
+            },
+            {
+                "$ref": "#/texts/17"
+            },
+            {
+                "$ref": "#/groups/3"
+            },
+            {
+                "$ref": "#/texts/20"
+            },
+            {
+                "$ref": "#/texts/21"
+            },
+            {
+                "$ref": "#/texts/22"
+            },
+            {
+                "$ref": "#/texts/23"
+            },
+            {
+                "$ref": "#/texts/24"
+            },
+            {
+                "$ref": "#/texts/25"
+            },
+            {
+                "$ref": "#/texts/26"
+            },
+            {
+                "$ref": "#/texts/27"
+            },
+            {
+                "$ref": "#/texts/28"
+            },
+            {
+                "$ref": "#/texts/29"
+            },
+            {
+                "$ref": "#/texts/30"
+            },
+            {
+                "$ref": "#/texts/31"
+            },
+            {
+                "$ref": "#/texts/32"
+            },
+            {
+                "$ref": "#/texts/33"
+            },
+            {
+                "$ref": "#/texts/34"
+            },
+            {
+                "$ref": "#/texts/35"
+            },
+            {
+                "$ref": "#/texts/36"
+            },
+            {
+                "$ref": "#/texts/37"
+            },
+            {
+                "$ref": "#/pictures/1"
+            },
+            {
+                "$ref": "#/pictures/2"
+            },
+            {
+                "$ref": "#/pictures/3"
+            },
+            {
+                "$ref": "#/pictures/4"
+            },
+            {
+                "$ref": "#/pictures/5"
+            },
+            {
+                "$ref": "#/pictures/6"
+            },
+            {
+                "$ref": "#/texts/38"
+            },
+            {
+                "$ref": "#/texts/39"
+            },
+            {
+                "$ref": "#/texts/40"
+            },
+            {
+                "$ref": "#/texts/41"
+            },
+            {
+                "$ref": "#/texts/42"
+            },
+            {
+                "$ref": "#/texts/43"
+            },
+            {
+                "$ref": "#/texts/44"
+            },
+            {
+                "$ref": "#/texts/45"
+            },
+            {
+                "$ref": "#/groups/4"
+            },
+            {
+                "$ref": "#/texts/51"
+            },
+            {
+                "$ref": "#/groups/5"
+            },
+            {
+                "$ref": "#/texts/57"
+            },
+            {
+                "$ref": "#/texts/58"
+            },
+            {
+                "$ref": "#/groups/6"
+            },
+            {
+                "$ref": "#/texts/63"
+            },
+            {
+                "$ref": "#/texts/64"
+            },
+            {
+                "$ref": "#/texts/65"
+            }
+        ],
+        "name": "_root_",
+        "label": "unspecified"
+    },
+    "groups": [
+        {
+            "self_ref": "#/groups/0",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [
+                {
+                    "$ref": "#/texts/7"
+                },
+                {
+                    "$ref": "#/texts/8"
+                },
+                {
+                    "$ref": "#/texts/9"
+                }
+            ],
+            "name": "list",
+            "label": "list"
+        },
+        {
+            "self_ref": "#/groups/1",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [
+                {
+                    "$ref": "#/texts/11"
+                }
+            ],
+            "name": "list",
+            "label": "list"
+        },
+        {
+            "self_ref": "#/groups/2",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [
+                {
+                    "$ref": "#/texts/15"
+                },
+                {
+                    "$ref": "#/texts/16"
+                }
+            ],
+            "name": "list",
+            "label": "list"
+        },
+        {
+            "self_ref": "#/groups/3",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [
+                {
+                    "$ref": "#/texts/18"
+                },
+                {
+                    "$ref": "#/texts/19"
+                }
+            ],
+            "name": "list",
+            "label": "list"
+        },
+        {
+            "self_ref": "#/groups/4",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [
+                {
+                    "$ref": "#/texts/46"
+                },
+                {
+                    "$ref": "#/texts/47"
+                },
+                {
+                    "$ref": "#/texts/48"
+                },
+                {
+                    "$ref": "#/texts/49"
+                },
+                {
+                    "$ref": "#/texts/50"
+                }
+            ],
+            "name": "list",
+            "label": "list"
+        },
+        {
+            "self_ref": "#/groups/5",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [
+                {
+                    "$ref": "#/texts/52"
+                },
+                {
+                    "$ref": "#/texts/53"
+                },
+                {
+                    "$ref": "#/texts/54"
+                },
+                {
+                    "$ref": "#/texts/55"
+                },
+                {
+                    "$ref": "#/texts/56"
+                }
+            ],
+            "name": "list",
+            "label": "list"
+        },
+        {
+            "self_ref": "#/groups/6",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [
+                {
+                    "$ref": "#/texts/59"
+                },
+                {
+                    "$ref": "#/texts/60"
+                },
+                {
+                    "$ref": "#/texts/61"
+                },
+                {
+                    "$ref": "#/texts/62"
+                }
+            ],
+            "name": "list",
+            "label": "list"
+        }
+    ],
+    "texts": [
+        {
+            "self_ref": "#/texts/0",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 93.98460388183594,
+                        "t": 817.1697387695312,
+                        "r": 218.31570434570312,
+                        "b": 781.3329467773438,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        9
+                    ]
+                }
+            ],
+            "orig": "Mir Faris",
+            "text": "Mir Faris",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/1",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 93.62400817871094,
+                        "t": 777.5263061523438,
+                        "r": 313.6924743652344,
+                        "b": 762.166259765625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        36
+                    ]
+                }
+            ],
+            "orig": "Software Engineer | Python | FastAPI",
+            "text": "Software Engineer | Python | FastAPI",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/2",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 35.512611389160156,
+                        "t": 743.6353759765625,
+                        "r": 382.8044738769531,
+                        "b": 646.60107421875,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        328
+                    ]
+                }
+            ],
+            "orig": "Tenacious & exceptionally driven software engineer. Demonstrates a strong enthusiasm for data science and artificial intelligence, supported by real-world experience in software development. Committed to leveraging AI and data science in software engineering, with a particular focus on implementing advanced projects like LLMs.",
+            "text": "Tenacious & exceptionally driven software engineer. Demonstrates a strong enthusiasm for data science and artificial intelligence, supported by real-world experience in software development. Committed to leveraging AI and data science in software engineering, with a particular focus on implementing advanced projects like LLMs."
+        },
+        {
+            "self_ref": "#/texts/3",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 28.847936630249023,
+                        "t": 634.0963134765625,
+                        "r": 129.4339599609375,
+                        "b": 618.3961181640625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        15
+                    ]
+                }
+            ],
+            "orig": "Work Experience",
+            "text": "Work Experience",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/4",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 35.49467086791992,
+                        "t": 609.9971313476562,
+                        "r": 205.0641632080078,
+                        "b": 595.9235229492188,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        30
+                    ]
+                }
+            ],
+            "orig": "Jr. Software Engineer, MyAlice",
+            "text": "Jr. Software Engineer, MyAlice",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/5",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 35.156494140625,
+                        "t": 588.35302734375,
+                        "r": 124.70902252197266,
+                        "b": 576.2612915039062,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        18
+                    ]
+                }
+            ],
+            "orig": "Nov 2024 - Present",
+            "text": "Nov 2024 - Present"
+        },
+        {
+            "self_ref": "#/texts/6",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 35.12418746948242,
+                        "t": 574.85302734375,
+                        "r": 345.6133117675781,
+                        "b": 562.7612915039062,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        64
+                    ]
+                }
+            ],
+            "orig": "Contributing to the backend development and optimization of LLM.",
+            "text": "Contributing to the backend development and optimization of LLM."
+        },
+        {
+            "self_ref": "#/texts/7",
+            "parent": {
+                "$ref": "#/groups/0"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 74.08601379394531,
+                        "t": 561.35302734375,
+                        "r": 174.22225952148438,
+                        "b": 549.2612915039062,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        18
+                    ]
+                }
+            ],
+            "orig": "Multi-Agent system",
+            "text": "Multi-Agent system",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/8",
+            "parent": {
+                "$ref": "#/groups/0"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 73.9847183227539,
+                        "t": 547.85302734375,
+                        "r": 296.3738098144531,
+                        "b": 535.296630859375,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        43
+                    ]
+                }
+            ],
+            "orig": "OpenAI Chatbot Integration using LlamaIndex",
+            "text": "OpenAI Chatbot Integration using LlamaIndex",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/9",
+            "parent": {
+                "$ref": "#/groups/0"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 74.08746337890625,
+                        "t": 534.35302734375,
+                        "r": 121.06475067138672,
+                        "b": 522.2612915039062,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        7
+                    ]
+                }
+            ],
+            "orig": "FastAPI",
+            "text": "FastAPI",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/10",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 35.11721420288086,
+                        "t": 520.85302734375,
+                        "r": 218.53651428222656,
+                        "b": 508.5933837890625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        40
+                    ]
+                }
+            ],
+            "orig": "Participate in mentoring study sessions.",
+            "text": "Participate in mentoring study sessions."
+        },
+        {
+            "self_ref": "#/texts/11",
+            "parent": {
+                "$ref": "#/groups/1"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 74.18289184570312,
+                        "t": 506.1029968261719,
+                        "r": 154.0971221923828,
+                        "b": 493.8883972167969,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        14
+                    ]
+                }
+            ],
+            "orig": "Design Pattern",
+            "text": "Design Pattern",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/12",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 36.042152404785156,
+                        "t": 482.9471130371094,
+                        "r": 246.38417053222656,
+                        "b": 468.8735046386719,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        36
+                    ]
+                }
+            ],
+            "orig": "Software Developer Intern, IT Way BD",
+            "text": "Software Developer Intern, IT Way BD",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/13",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 41.084938049316406,
+                        "t": 463.60302734375,
+                        "r": 116.44417572021484,
+                        "b": 451.5113220214844,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        15
+                    ]
+                }
+            ],
+            "orig": "Sept - Dec 2023",
+            "text": "Sept - Dec 2023"
+        },
+        {
+            "self_ref": "#/texts/14",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 40.95497131347656,
+                        "t": 450.10302734375,
+                        "r": 186.7315673828125,
+                        "b": 437.7950439453125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        33
+                    ]
+                }
+            ],
+            "orig": "Participate in building websites.",
+            "text": "Participate in building websites."
+        },
+        {
+            "self_ref": "#/texts/15",
+            "parent": {
+                "$ref": "#/groups/2"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 73.9698715209961,
+                        "t": 436.4030456542969,
+                        "r": 193.26792907714844,
+                        "b": 423.9410095214844,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        22
+                    ]
+                }
+            ],
+            "orig": "Backend (Php, Laravel)",
+            "text": "Backend (Php, Laravel)",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/16",
+            "parent": {
+                "$ref": "#/groups/2"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 74.03640747070312,
+                        "t": 422.9030456542969,
+                        "r": 269.2306823730469,
+                        "b": 410.73077392578125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        40
+                    ]
+                }
+            ],
+            "orig": "Frontend (Vanilla Html, Css, JavaScript)",
+            "text": "Frontend (Vanilla Html, Css, JavaScript)",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/17",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 40.96488952636719,
+                        "t": 409.6029968261719,
+                        "r": 266.9789733886719,
+                        "b": 397.5113220214844,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        48
+                    ]
+                }
+            ],
+            "orig": "Client Support to River Stream Home Textile Ltd.",
+            "text": "Client Support to River Stream Home Textile Ltd."
+        },
+        {
+            "self_ref": "#/texts/18",
+            "parent": {
+                "$ref": "#/groups/3"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 73.87727355957031,
+                        "t": 394.9029846191406,
+                        "r": 134.48764038085938,
+                        "b": 382.811279296875,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        10
+                    ]
+                }
+            ],
+            "orig": "Data Entry",
+            "text": "Data Entry",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/19",
+            "parent": {
+                "$ref": "#/groups/3"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 74.21887969970703,
+                        "t": 381.4029846191406,
+                        "r": 257.5321044921875,
+                        "b": 369.311279296875,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        35
+                    ]
+                }
+            ],
+            "orig": "Teaching POS software configuration",
+            "text": "Teaching POS software configuration",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/20",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 41.11530303955078,
+                        "t": 369.1029968261719,
+                        "r": 179.9842071533203,
+                        "b": 356.58245849609375,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        29
+                    ]
+                }
+            ],
+            "orig": "Software sales and marketing.",
+            "text": "Software sales and marketing."
+        },
+        {
+            "self_ref": "#/texts/21",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 29.6451473236084,
+                        "t": 348.0003662109375,
+                        "r": 171.52532958984375,
+                        "b": 332.68243408203125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        22
+                    ]
+                }
+            ],
+            "orig": "Educational Background",
+            "text": "Educational Background",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/22",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 40.344703674316406,
+                        "t": 326.6846008300781,
+                        "r": 299.7185363769531,
+                        "b": 312.6109924316406,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        47
+                    ]
+                }
+            ],
+            "orig": "American International University of Bangladesh",
+            "text": "American International University of Bangladesh",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/23",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 59.19413375854492,
+                        "t": 306.0155334472656,
+                        "r": 176.55677795410156,
+                        "b": 293.923828125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        25
+                    ]
+                }
+            ],
+            "orig": "Bachelor of Science (BSc)",
+            "text": "Bachelor of Science (BSc)"
+        },
+        {
+            "self_ref": "#/texts/24",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 59.24753189086914,
+                        "t": 293.2655334472656,
+                        "r": 236.8221435546875,
+                        "b": 280.6099853515625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        36
+                    ]
+                }
+            ],
+            "orig": "Computer Science & Engineering (CSE)",
+            "text": "Computer Science & Engineering (CSE)"
+        },
+        {
+            "self_ref": "#/texts/25",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 59.184391021728516,
+                        "t": 280.5155334472656,
+                        "r": 111.4055404663086,
+                        "b": 268.423828125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        10
+                    ]
+                }
+            ],
+            "orig": "CGPA: 3.64",
+            "text": "CGPA: 3.64"
+        },
+        {
+            "self_ref": "#/texts/26",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 59.04389953613281,
+                        "t": 267.7655334472656,
+                        "r": 114.49714660644531,
+                        "b": 255.673828125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        11
+                    ]
+                }
+            ],
+            "orig": "2020 - 2024",
+            "text": "2020 - 2024"
+        },
+        {
+            "self_ref": "#/texts/27",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 40.81383514404297,
+                        "t": 248.08462524414062,
+                        "r": 138.32058715820312,
+                        "b": 234.01101684570312,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        17
+                    ]
+                }
+            ],
+            "orig": "Milestone College",
+            "text": "Milestone College",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/28",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 59.26195526123047,
+                        "t": 233.41554260253906,
+                        "r": 220.54933166503906,
+                        "b": 220.979736328125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        34
+                    ]
+                }
+            ],
+            "orig": "Higher Secondary Certificate (HSC)",
+            "text": "Higher Secondary Certificate (HSC)"
+        },
+        {
+            "self_ref": "#/texts/29",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 59.1338005065918,
+                        "t": 220.66554260253906,
+                        "r": 104.23744201660156,
+                        "b": 208.57383728027344,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        9
+                    ]
+                }
+            ],
+            "orig": "GPA: 5.00",
+            "text": "GPA: 5.00"
+        },
+        {
+            "self_ref": "#/texts/30",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 58.82334518432617,
+                        "t": 207.91554260253906,
+                        "r": 81.99640655517578,
+                        "b": 195.82383728027344,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        4
+                    ]
+                }
+            ],
+            "orig": "2019",
+            "text": "2019"
+        },
+        {
+            "self_ref": "#/texts/31",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 41.10089111328125,
+                        "t": 188.15963745117188,
+                        "r": 156.60614013671875,
+                        "b": 174.08602905273438,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        20
+                    ]
+                }
+            ],
+            "orig": "Research Publication",
+            "text": "Research Publication",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/32",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 43.66474151611328,
+                        "t": 168.7449951171875,
+                        "r": 174.5335693359375,
+                        "b": 155.06744384765625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        26
+                    ]
+                }
+            ],
+            "orig": "From Survival to Thriving:",
+            "text": "From Survival to Thriving:"
+        },
+        {
+            "self_ref": "#/texts/33",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 43.759220123291016,
+                        "t": 150.36549377441406,
+                        "r": 364.14111328125,
+                        "b": 138.1226806640625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        65
+                    ]
+                }
+            ],
+            "orig": "AI-Powered Pathways for Homeless Children's Adoption and Healing.",
+            "text": "AI-Powered Pathways for Homeless Children's Adoption and Healing."
+        },
+        {
+            "self_ref": "#/texts/34",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 44.08258056640625,
+                        "t": 133.61549377441406,
+                        "r": 392.8699035644531,
+                        "b": 108.0238037109375,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        107
+                    ]
+                }
+            ],
+            "orig": "Journal: International Journal of Scientific research and Engineering Trends (IJSRET) . Vol: 10, Issue: 06.",
+            "text": "Journal: International Journal of Scientific research and Engineering Trends (IJSRET) . Vol: 10, Issue: 06."
+        },
+        {
+            "self_ref": "#/texts/35",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 44.49144744873047,
+                        "t": 106.6155014038086,
+                        "r": 111.75635528564453,
+                        "b": 94.52379608154297,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        12
+                    ]
+                }
+            ],
+            "orig": "Nov-Dec-2024",
+            "text": "Nov-Dec-2024"
+        },
+        {
+            "self_ref": "#/texts/36",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 231.67581176757812,
+                        "t": 232.66554260253906,
+                        "r": 389.0213928222656,
+                        "b": 207.07383728027344,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        43
+                    ]
+                }
+            ],
+            "orig": "Secondary School Certificate(SSC) GPA: 5.00",
+            "text": "Secondary School Certificate(SSC) GPA: 5.00"
+        },
+        {
+            "self_ref": "#/texts/37",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 232.0202178955078,
+                        "t": 205.66554260253906,
+                        "r": 255.11322021484375,
+                        "b": 193.57383728027344,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        4
+                    ]
+                }
+            ],
+            "orig": "2017",
+            "text": "2017"
+        },
+        {
+            "self_ref": "#/texts/38",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 427.23565673828125,
+                        "t": 753.61767578125,
+                        "r": 466.3037414550781,
+                        "b": 741.5259399414062,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        8
+                    ]
+                }
+            ],
+            "orig": "Linkedin",
+            "text": "Linkedin"
+        },
+        {
+            "self_ref": "#/texts/39",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 427.79217529296875,
+                        "t": 736.6176147460938,
+                        "r": 506.4312438964844,
+                        "b": 724.52587890625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        14
+                    ]
+                }
+            ],
+            "orig": "+8801330804697",
+            "text": "+8801330804697"
+        },
+        {
+            "self_ref": "#/texts/40",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 427.2226867675781,
+                        "t": 720.314208984375,
+                        "r": 526.6029052734375,
+                        "b": 707.8619384765625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        20
+                    ]
+                }
+            ],
+            "orig": "mirfaris79@gmail.com",
+            "text": "mirfaris79@gmail.com"
+        },
+        {
+            "self_ref": "#/texts/41",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 426.32745361328125,
+                        "t": 703.4722900390625,
+                        "r": 457.876708984375,
+                        "b": 691.2646484375,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        6
+                    ]
+                }
+            ],
+            "orig": "Github",
+            "text": "Github"
+        },
+        {
+            "self_ref": "#/texts/42",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 427.12225341796875,
+                        "t": 686.7850341796875,
+                        "r": 467.97088623046875,
+                        "b": 674.35302734375,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        9
+                    ]
+                }
+            ],
+            "orig": "Portfolio",
+            "text": "Portfolio"
+        },
+        {
+            "self_ref": "#/texts/43",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 427.7579345703125,
+                        "t": 670.3477172851562,
+                        "r": 485.730712890625,
+                        "b": 658.2559814453125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        13
+                    ]
+                }
+            ],
+            "orig": "Uttara, Dhaka",
+            "text": "Uttara, Dhaka"
+        },
+        {
+            "self_ref": "#/texts/44",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 404.780029296875,
+                        "t": 625.0831298828125,
+                        "r": 437.9806213378906,
+                        "b": 609.7230834960938,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        6
+                    ]
+                }
+            ],
+            "orig": "Skills",
+            "text": "Skills",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/45",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 404.291259765625,
+                        "t": 602.7825317382812,
+                        "r": 489.1987609863281,
+                        "b": 589.484375,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        16
+                    ]
+                }
+            ],
+            "orig": "Technical Skills",
+            "text": "Technical Skills",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/46",
+            "parent": {
+                "$ref": "#/groups/4"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 411.04058837890625,
+                        "t": 585.653076171875,
+                        "r": 554.087158203125,
+                        "b": 560.000732421875,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        59
+                    ]
+                }
+            ],
+            "orig": "Framework: Flutter, Laravel, Nextjs, Nestjs, React, FastAPI",
+            "text": "Framework: Flutter, Laravel, Nextjs, Nestjs, React, FastAPI",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/47",
+            "parent": {
+                "$ref": "#/groups/4"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 411.0342712402344,
+                        "t": 558.653076171875,
+                        "r": 561.8563842773438,
+                        "b": 546.5613403320312,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        27
+                    ]
+                }
+            ],
+            "orig": "Database: MySQL, PostgreSQL",
+            "text": "Database: MySQL, PostgreSQL",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/48",
+            "parent": {
+                "$ref": "#/groups/4"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 410.9983825683594,
+                        "t": 545.153076171875,
+                        "r": 547.0254516601562,
+                        "b": 519.5613403320312,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        54
+                    ]
+                }
+            ],
+            "orig": "Language: Java, JavaScript, PHP, Dart, Python, C#, C++",
+            "text": "Language: Java, JavaScript, PHP, Dart, Python, C#, C++",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/49",
+            "parent": {
+                "$ref": "#/groups/4"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 410.92864990234375,
+                        "t": 518.153076171875,
+                        "r": 551.634521484375,
+                        "b": 506.0613098144531,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        29
+                    ]
+                }
+            ],
+            "orig": "Version Control: Git & Github",
+            "text": "Version Control: Git & Github",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/50",
+            "parent": {
+                "$ref": "#/groups/4"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 411.19329833984375,
+                        "t": 504.6530456542969,
+                        "r": 493.0881652832031,
+                        "b": 492.5613098144531,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        16
+                    ]
+                }
+            ],
+            "orig": "Microsoft Office",
+            "text": "Microsoft Office",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/51",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 404.780029296875,
+                        "t": 478.98248291015625,
+                        "r": 485.8304748535156,
+                        "b": 465.684326171875,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        15
+                    ]
+                }
+            ],
+            "orig": "Business Skills",
+            "text": "Business Skills",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/52",
+            "parent": {
+                "$ref": "#/groups/5"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 413.1683044433594,
+                        "t": 463.35302734375,
+                        "r": 489.3839111328125,
+                        "b": 451.20458984375,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        14
+                    ]
+                }
+            ],
+            "orig": "Client Support",
+            "text": "Client Support",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/53",
+            "parent": {
+                "$ref": "#/groups/5"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 412.9920959472656,
+                        "t": 449.85302734375,
+                        "r": 527.9873657226562,
+                        "b": 437.7613220214844,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        20
+                    ]
+                }
+            ],
+            "orig": "Formal Communication",
+            "text": "Formal Communication",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/54",
+            "parent": {
+                "$ref": "#/groups/5"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 413.0077209472656,
+                        "t": 436.3529968261719,
+                        "r": 497.7200012207031,
+                        "b": 424.1283874511719,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        15
+                    ]
+                }
+            ],
+            "orig": "Decision Making",
+            "text": "Decision Making",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/55",
+            "parent": {
+                "$ref": "#/groups/5"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 413.0304870605469,
+                        "t": 422.8529968261719,
+                        "r": 493.6551208496094,
+                        "b": 410.7613220214844,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        15
+                    ]
+                }
+            ],
+            "orig": "Great Motivator",
+            "text": "Great Motivator",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/56",
+            "parent": {
+                "$ref": "#/groups/5"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 413.1757507324219,
+                        "t": 409.3529968261719,
+                        "r": 507.9736022949219,
+                        "b": 397.2613220214844,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        15
+                    ]
+                }
+            ],
+            "orig": "Time Management",
+            "text": "Time Management",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/57",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 405.2047424316406,
+                        "t": 380.0581359863281,
+                        "r": 490.0469970703125,
+                        "b": 364.6981506347656,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        13
+                    ]
+                }
+            ],
+            "orig": "Short Courses",
+            "text": "Short Courses",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/58",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 406.87579345703125,
+                        "t": 361.2530517578125,
+                        "r": 556.7171630859375,
+                        "b": 335.6613464355469,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        47
+                    ]
+                }
+            ],
+            "orig": "Mobile Application Development Institute: Ostad",
+            "text": "Mobile Application Development Institute: Ostad"
+        },
+        {
+            "self_ref": "#/texts/59",
+            "parent": {
+                "$ref": "#/groups/6"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 410.3406066894531,
+                        "t": 333.6029968261719,
+                        "r": 451.7944641113281,
+                        "b": 321.51129150390625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        7
+                    ]
+                }
+            ],
+            "orig": "Flutter",
+            "text": "Flutter",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/60",
+            "parent": {
+                "$ref": "#/groups/6"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 410.2030334472656,
+                        "t": 320.1029968261719,
+                        "r": 458.1109313964844,
+                        "b": 308.01129150390625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        7
+                    ]
+                }
+            ],
+            "orig": "RestAPI",
+            "text": "RestAPI",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/61",
+            "parent": {
+                "$ref": "#/groups/6"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 410.32635498046875,
+                        "t": 306.6029968261719,
+                        "r": 461.7129211425781,
+                        "b": 294.51129150390625,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        8
+                    ]
+                }
+            ],
+            "orig": "Firebase",
+            "text": "Firebase",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/62",
+            "parent": {
+                "$ref": "#/groups/6"
+            },
+            "children": [],
+            "label": "list_item",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 410.2162170410156,
+                        "t": 293.1029968261719,
+                        "r": 456.75885009765625,
+                        "b": 280.917236328125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        6
+                    ]
+                }
+            ],
+            "orig": "Widget",
+            "text": "Widget",
+            "enumerated": false,
+            "marker": "-"
+        },
+        {
+            "self_ref": "#/texts/63",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "section_header",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 402.9648132324219,
+                        "t": 257.358154296875,
+                        "r": 460.6173095703125,
+                        "b": 241.9981689453125,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        10
+                    ]
+                }
+            ],
+            "orig": "Activities",
+            "text": "Activities",
+            "level": 1
+        },
+        {
+            "self_ref": "#/texts/64",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 404.98223876953125,
+                        "t": 233.62806701660156,
+                        "r": 566.3026123046875,
+                        "b": 196.03636169433594,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        98
+                    ]
+                }
+            ],
+            "orig": "Organized Science fair, Cultural and Awareness programs with several organizations, NGOs and AIUB.",
+            "text": "Organized Science fair, Cultural and Awareness programs with several organizations, NGOs and AIUB."
+        },
+        {
+            "self_ref": "#/texts/65",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "text",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 405.21234130859375,
+                        "t": 182.62806701660156,
+                        "r": 564.1897583007812,
+                        "b": 145.03636169433594,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        86
+                    ]
+                }
+            ],
+            "orig": "Involved in local and international youth and social movements/seminars/organizations.",
+            "text": "Involved in local and international youth and social movements/seminars/organizations."
+        }
+    ],
+    "pictures": [
+        {
+            "self_ref": "#/pictures/0",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "picture",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 38.44078826904297,
+                        "t": 816.3599853515625,
+                        "r": 85.43626403808594,
+                        "b": 760.0789794921875,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "captions": [],
+            "references": [],
+            "footnotes": [],
+            "annotations": []
+        },
+        {
+            "self_ref": "#/pictures/1",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "picture",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 407.59576416015625,
+                        "t": 755.1424560546875,
+                        "r": 424.3570251464844,
+                        "b": 739.3656005859375,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "captions": [],
+            "references": [],
+            "footnotes": [],
+            "annotations": []
+        },
+        {
+            "self_ref": "#/pictures/2",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "picture",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 407.5465087890625,
+                        "t": 737.9806518554688,
+                        "r": 424.2042236328125,
+                        "b": 722.6146850585938,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "captions": [],
+            "references": [],
+            "footnotes": [],
+            "annotations": []
+        },
+        {
+            "self_ref": "#/pictures/3",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "picture",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 408.9971008300781,
+                        "t": 720.9440307617188,
+                        "r": 424.67059326171875,
+                        "b": 706.4069213867188,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "captions": [],
+            "references": [],
+            "footnotes": [],
+            "annotations": []
+        },
+        {
+            "self_ref": "#/pictures/4",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "picture",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 408.5292663574219,
+                        "t": 705.3997802734375,
+                        "r": 424.3055114746094,
+                        "b": 688.6419067382812,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "captions": [],
+            "references": [],
+            "footnotes": [],
+            "annotations": []
+        },
+        {
+            "self_ref": "#/pictures/5",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "picture",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 409.66876220703125,
+                        "t": 686.9783935546875,
+                        "r": 424.55352783203125,
+                        "b": 671.4261474609375,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "captions": [],
+            "references": [],
+            "footnotes": [],
+            "annotations": []
+        },
+        {
+            "self_ref": "#/pictures/6",
+            "parent": {
+                "$ref": "#/body"
+            },
+            "children": [],
+            "label": "picture",
+            "prov": [
+                {
+                    "page_no": 1,
+                    "bbox": {
+                        "l": 409.79351806640625,
+                        "t": 669.5771484375,
+                        "r": 424.9269104003906,
+                        "b": 654.5340576171875,
+                        "coord_origin": "BOTTOMLEFT"
+                    },
+                    "charspan": [
+                        0,
+                        0
+                    ]
+                }
+            ],
+            "captions": [],
+            "references": [],
+            "footnotes": [],
+            "annotations": []
+        }
+    ],
+    "tables": [],
+    "key_value_items": [],
+    "pages": {
+        "1": {
+            "size": {
+                "width": 595.5,
+                "height": 842.25
+            },
+            "page_no": 1
+        }
+    }
+}
