@@ -29,7 +29,8 @@ def scrape_content(url):
     text_content = content.get_text(separator='\n', strip=True) if content else "No main content found."
 
     # Extract and clean the title
-    title = soup.title.string.strip() if soup.title else "No title found."
+    title = soup.title.string.strip() if soup.title and soup.title.string else "No title available"
+
 
     # Extract and clean meta description
     meta_description = soup.find('meta', attrs={'name': 'description'})
@@ -52,6 +53,6 @@ def scrape_content(url):
     return json.dumps(result, indent=4)
 
 
-url = "https://www.bd.airtel.com/en/about-us/board-of-directors"  
+url = "https://www.robi.com.bd/en/personal/vas/all-vas-services"  
 content = scrape_content(url)
 print(content)

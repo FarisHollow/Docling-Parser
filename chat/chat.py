@@ -18,9 +18,9 @@ async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     print("WebSocket connection established.")
     query_tool = QueryEngineTool.from_defaults(
-        query_engine=index.as_chat_engine(),
+        query_engine=index.as_chat_engine(similarity_top_k=2, sparse_top_k=12, vector_store_query_mode="hybrid"),
         name="Data",
-        description=("Provides information about all the data deeply. If you don't know the answer simply say,  'I have no clue' ",)
+        description=("Have a conversation. If you don't know the answer simply say,'I have no clue' ",)
     )
 
     llm = OpenAI(model='gpt-3.5-turbo')
@@ -29,6 +29,7 @@ async def websocket_endpoint(websocket: WebSocket):
         tools=[query_tool],
         memory=chat_memory,
         verbose=True
+        
     )
     
     try:
@@ -38,14 +39,21 @@ async def websocket_endpoint(websocket: WebSocket):
             
             await websocket.send_text(f"User: {data}")
             
+            
+            
             enriched_query = await search_context(data=data)
             
     
             response = str(agent.chat(enriched_query))
+            # chat_store.persist(persist_path=chat_store_path)
+            
             print(f"Reply: {response}")
+            
+            
             
 
             await websocket.send_text(f"Reply: {response}")
+            
             
     except WebSocketDisconnect as e:
         print(f"WebSocket disconnected: {e}")
